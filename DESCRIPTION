@@ -1,0 +1,14 @@
+Package: mediaBabies
+Title: Analyses the Effect of Media in Baby Name Trends
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Haley", "Burger", , "first.last@example.com", role = c("aut", "cre")),
+    person("Brielle", "Cirlig", , "a02322411@usu.edu", role = c("aut", "cre")),
+    person("Hannah", "Davis", , "first.last@example.com", role = c("aut", "cre"))
+    )
+Description: This packages analyses the effect of popular movies and TV shows
+  on baby-naming trends over the last 50 years.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
