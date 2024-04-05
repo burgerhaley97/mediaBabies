@@ -1,2 +1,5 @@
+^README\.Rmd$
 ^data-raw$
 ^LICENSE\.md$
+^mediaBabies\.Rproj$
+^\.Rproj\.user$
