@@ -8,7 +8,8 @@
 #' @examples
 #' calculate_percent_change(c(1:10))
 calculate_percent_change <- function(counts) {
-  pc <- c(0, diff(counts) / counts[seq_along(counts) - 1] * 100)
+  pc <- c(0, diff(counts) / pmin(counts[seq_along(counts) - 1],
+                                 counts[-1]) * 100)
   return(pc)
 }
 
@@ -32,6 +33,7 @@ create_percent_change_df <- function(count_df) {
 
   # Calculate percent changes
   pc_df <- as.data.frame(apply(tcount_df, 2, calculate_percent_change))
+  rownames(pc_df) <- rownames(tcount_df)
   return(pc_df)
 }
 
