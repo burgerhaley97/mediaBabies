@@ -1,0 +1,72 @@
+Filters:
+	Basic:
+		tconst: keep (key)
+		TitleType: movie, tvSeries
+		PrimaryTitle: keep
+		isAdult: 0
+		startYear: 1973+
+	Episode:
+		tconst: keep(key)
+		Associate all titles with parent title (tvSeries)
+	Principals:
+		tconst: keep (key)
+		Category: Actor
+		characters: will need data manipulation to get first names
+		Filter by title in Basics_Filtered
+	Ratings:
+		tconst: keep
+		averageRating: >7.0
+		numVotes: >100,000
+		
+Steps: 
+3. Filter principles by in basic_filtered, called principles_filtered
+
+Combine basic_filtered, episode_filtered, principles_filtered:
+4. Associate all principles with episode primary title (unique), called principles_unique
+5. Associate basic_filtered with principles_unique
+	
+
+-- Combine and filter Basic and Ratings, called basic_filtered --
+CREATE TABLE basic_filtered AS
+	SELECT basics.tconst, basics.titleType, basics.primaryTitle, basics.startYear, ratings.averageRating, ratings.numVotes
+	FROM basics, ratings
+	WHERE basics.tconst = ratings.tconst
+		AND basics.titleType IN ("movie", "tvSeries")
+		AND basics.isAdult = 0
+		AND basics.startYear > 1972
+		AND ratings.averageRating > 7.0
+		AND ratings.numVotes > 100000
+		
+-- Filter Episode by primary title in basic_filtered, called episode_filtered --
+CREATE TABLE episode_filtered AS
+	SELECT episode.parentTconst, episode.tconst
+	FROM episode, basic_filtered
+	WHERE episode.parentTconst = basic_filtered.tconst
+	
+-- Select only the actors from principles whos character isn't blank, called principals_actors --
+CREATE TABLE principals_actors AS
+	SELECT principals.tconst, principals.ordering, principals.characters
+	FROM principals
+	WHERE principals.category IN ("actor", "actress")
+		AND principals.characters != "\N"
+		
+-- Select all principals who are listed in specific episodes, called principlals_filtered_episodes --
+CREATE TABLE principals_filtered_episodes AS
+	SELECT DISTINCT e.parentTconst AS tconst, p.ordering, p.characters
+	FROM principals_actors p, episode_filtered e
+	WHERE p.tconst = e.tconst
+	
+-- Select all principles who are listed in shows without episodes, called principals_filtered_basic --
+CREATE TABLE principals_filtered_basic AS
+	SELECT p.tconst, p.ordering, p.characters
+	FROM principals_actors p, basic_filtered b
+	WHERE p.tconst = b.tconst
+	
+-- Combine principals_filtered_basic and principals_filtered_episodes, called principals_filtered --
+CREATE TABLE principals_filtered AS
+SELECT p.tconst, p.characters FROM principals_filtered_episodes p
+UNION 
+SELECT b.tconst, b.characters FROM principals_filtered_basic b
+
+Rename filtered tables as regular tables and remove old tables
+
