@@ -1,6 +1,24 @@
 # baby_count -------------------------------------------------------------------
 
+baby_count <- function(name, vec) {
+  obj <- validate_baby_count(name, vec)
 
+  attr(obj, "name") <- name
+  class(obj) <- "baby_count"
+  return(obj)
+}
+
+validate_baby_count <- function(name, vec) {
+  if (!is.character(name)) {
+    stop("The name must be a string.")
+  }
+  if (!(class(vec) == "vector")) {
+    stop("`vec` must be a vector.")
+  }
+  if (!is.numeric(count)) {
+    stop("`vec` must be a numeric vector.")
+  }
+}
 
 # baby_pc ----------------------------------------------------------------------
 
