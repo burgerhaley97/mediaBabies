@@ -3,3 +3,5 @@
 export(calculate_percent_change)
 export(create_percent_change_df)
 export(create_poi_df)
+export(filter_baby_names_by_char)
+export(filter_char_by_baby_names)
