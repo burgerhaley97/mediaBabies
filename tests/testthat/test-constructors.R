@@ -1,3 +1,68 @@
+# baby_count -------------------------------------------------------------------
+test_that("baby_count obj should have a name and start_year attribute", {
+  # Arrange
+  test_df <- data.frame(Betty = c(73, 62, 86), Murial = c(93, 63, 27))
+  rownames(test_df) <- c(1974:1976)
+  expected_name_attr <- "Betty"
+  expected_start_year_attr <- 1974
+  expected_class_attr <- "baby_count"
+
+  # Act
+  baby <- baby_count(colnames(test_df)[1],
+                     as.numeric(rownames(test_df)[1]),
+                     test_df[[1]])
+
+  # Assert
+  expect_equal(attr(baby, "name"), expected_name_attr)
+  expect_equal(attr(baby, "start_year"), expected_start_year_attr)
+  expect_equal(class(baby), expected_class_attr)
+})
+
+test_that("baby_count constructor should throw an error if data not correct", {
+  # Arrange
+  test_vec_good_type <- c(73, 62, 86)
+  test_vec_bad_type <- c("73", "62", "86")
+
+  # Act
+  # Assert
+  expect_error(baby_count(666, 1976, test_vec_good_type))
+  expect_error(baby_count("Murial", "1976", test_vec_good_type))
+  expect_error(baby_count("Murial", 1976, test_vec_bad_type))
+})
+
+# baby_pc -------------------------------------------------------------------
+test_that("baby_pc obj should have a name and start_year attribute", {
+  # Arrange
+  test_df <- data.frame(Betty = c(73, 62, 86), Murial = c(93, 63, 27))
+  rownames(test_df) <- c(1974:1976)
+  expected_name_attr <- "Betty"
+  expected_start_year_attr <- 1974
+  expected_class_attr <- "baby_pc"
+
+  # Act
+  baby <- baby_pc(colnames(test_df)[1],
+                  as.numeric(rownames(test_df)[1]),
+                  test_df[[1]])
+
+  # Assert
+  expect_equal(attr(baby, "name"), expected_name_attr)
+  expect_equal(attr(baby, "start_year"), expected_start_year_attr)
+  expect_equal(class(baby), expected_class_attr)
+})
+
+test_that("baby_pc constructor should throw an error if data not correct", {
+  # Arrange
+  test_vec_good_type <- c(73, 62, 86)
+  test_vec_bad_type <- c("73", "62", "86")
+
+  # Act
+  # Assert
+  expect_error(baby_pc(666, 1976, test_vec_good_type))
+  expect_error(baby_pc("Murial", "1976", test_vec_good_type))
+  expect_error(baby_pc("Murial", 1976, test_vec_bad_type))
+})
+
+# influences -------------------------------------------------------------------
 test_that("influences obj should have name attribute", {
   # Arrange
   test_df <- data.frame(name = c("Betty", "Betty"),
