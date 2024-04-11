@@ -96,8 +96,8 @@ baby_name_counts <- name_counts(listfile, uniq_baby_names)
 baby_name_counts_t <- transposed_df(baby_name_counts)
 
 # male and female baby name data
-male_name_counts <- baby_name_counts_t[[1]]
-female_name_counts <- baby_name_counts_t[[2]]
+male_babies <- baby_name_counts_t[[1]]
+female_babies <- baby_name_counts_t[[2]]
 
-usethis::use_data(male_name_counts, overwrite = TRUE)
-usethis::use_data(female_name_counts, overwrite = TRUE)
+usethis::use_data(male_babies, overwrite = TRUE)
+usethis::use_data(female_babies, overwrite = TRUE)
