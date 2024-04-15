@@ -1,3 +1,5 @@
+#' Media Influenced Names Function
+#'
 #' @description
 #' A function that creates a media_influenced_names data frame.
 #'
@@ -7,6 +9,7 @@
 #'    media data.
 #' @return The media_influenced_names data frame with name, title, release_year,
 #'    poi_year, and percent_change columns.
+#' @import dplyr
 #' @export
 media_influenced_names <- function(poi_df, media_df){
   # only keep rows from  poi_df  and media_df where the poi_year and
@@ -38,7 +41,3 @@ poi_df <- data.frame(
   percent_change = c(67, 114),
   year = c(1980, 2023)
 )
-
-library(dplyr)
-media_influenced_names(poi_df, media_df)
-
