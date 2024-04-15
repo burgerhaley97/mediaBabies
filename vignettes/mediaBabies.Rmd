@@ -1,0 +1,79 @@
+---
+title: "mediaBabies"
+output: rmarkdown::html_vignette
+descrition: |
+  The mediaBabies package allows you to explore the correlation between the   
+  year a media title was released and the number of babies that were named    
+  the corresponding character's name. This vignette introduces you to a       
+  sample workflow and analysis.
+vignette: >
+  %\VignetteIndexEntry{mediaBabies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction: 
+
+The mediaBabies package allows you to explore the correlation between the year a media title was released and the number of babies that were named the corresponding character's name. This package uses (insert data sources) to get the necessary media and baby names data. You can use the custom functions in this package to filter the raw media data and babies names data, create custom objects, and plot the objects to visualize any trends.
+
+* `filter_char_by_baby_names()` Filters the movie character dataframe to only include movie characters that have a name listed in the baby names data frame.
+* `filter_baby_names_by_char()` Filters baby names data frame to only include names
+that have an associated character in the movie titles dataframe.
+* `create_poi_df()` Creates a dataframe consisting of three columns: name, year, and
+percent_change for the baby names data. 
+* `media_influenced_names()` Creates a dataframe with the name, title, release_year, poi_year, and percent_change columns for future analysis.
+* other functions to add?
+  
+
+## Example Workflow
+
+```{r setup}
+library(mediaBabies)
+```
+
+We'll start by reading in and filtering the raw data.
+```{r}
+
+# load raw data media data
+load("C:/Users/A02425259/github/packages/mediaBabies/data/characters.rda")
+head(characters)
+# load boy_names and girl_names
+load("C:/Users/A02425259/github/packages/mediaBabies/data/female_babies.rda")
+load("C:/Users/A02425259/github/packages/mediaBabies/data/male_babies.rda")
+
+# insert filter functions
+head(filter_baby_names_by_char(female_babies, characters))
+head(filter_baby_names_by_char(male_babies, characters))
+head(filter_char_by_baby_names(characters, male_babies))
+```
+
+```{r}
+# percent change functions
+
+# create media influenced names table 
+```
+
+```{r}
+# convert to custom objects
+
+```
+
+```{r}
+# plot and visualize the results 
+
+```
+
+## Interesting Findings
+
+```{r}
+# add some interesting take aways from the analysis ?
+
+```
+

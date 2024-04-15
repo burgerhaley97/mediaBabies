@@ -14,9 +14,12 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests:
     DBI,
+    knitr,
+    rmarkdown,
     RSQLite,
     testthat (>= 3.0.0)
 Depends: 
     R (>= 2.10)
 LazyData: true
 Config/testthat/edition: 3
+VignetteBuilder: knitr
