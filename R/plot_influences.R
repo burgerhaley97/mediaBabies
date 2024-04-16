@@ -6,7 +6,7 @@
 #' @param x An object of class influences.
 #' @param y An object of class baby_count or baby_pc.
 #' @param ... Traditional plot function arguments.
-#'
+#' @import ggplot2
 #' @return A plot of the influences object
 #' @examples
 #' # creating baby_pc object
@@ -30,7 +30,7 @@
 #' @export
 plot.influences <- function(x, y, ...) {
   # Determining y-axis name
-  if (class(y) == "baby_count") {
+  if (inherits(y, "baby_count")) {
     y_name = "Count"
   } else {
     y_name = "Percent Change"
@@ -42,10 +42,12 @@ plot.influences <- function(x, y, ...) {
   release_year <- x[["release_year"]]
   title <- x[["title"]]
   # creating data frame
-  df <- data.frame(values = y[1:length(y)],
-                   years = seq(year, year + length(y)-1, 1))
+  values <- y[1:length(y)]
+  years <- seq(year, year + length(y)-1, 1)
+  df <- data.frame(values = values,
+                   years = years)
   # plotting objects
-  ggplot(data = df, aes(x = years, y = values)) +
+  ggplot2::ggplot(data = df, aes(x = years, y = values)) +
     geom_line() +
     geom_point(data = df[df$years %in% poi_year, ],
                aes(x = years, y = values, col = "lightblue"), size = 3) +
