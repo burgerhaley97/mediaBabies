@@ -34,46 +34,49 @@ percent_change for the baby names data.
 
 ## Example Workflow
 
-```{r setup}
-library(mediaBabies)
+```{r setup, message = FALSE}
+# Make sure package is installed first or else library won't work 
+library("mediaBabies")
 ```
 
 We'll start by reading in and filtering the raw data.
 ```{r}
-
 # load raw data media data
-load("C:/Users/A02425259/github/packages/mediaBabies/data/characters.rda")
+data(characters, package = "mediaBabies")
 head(characters)
+
 # load boy_names and girl_names
-load("C:/Users/A02425259/github/packages/mediaBabies/data/female_babies.rda")
-load("C:/Users/A02425259/github/packages/mediaBabies/data/male_babies.rda")
+data(female_babies, package = "mediaBabies")
+head(female_babies)
 
-# insert filter functions
-head(filter_baby_names_by_char(female_babies, characters))
-head(filter_baby_names_by_char(male_babies, characters))
-head(filter_char_by_baby_names(characters, male_babies))
+# Filter the data frames so only matching names from each are kept
+babies_df <- filter_baby_names_by_char(female_babies, characters)
+chars_df <- filter_char_by_baby_names(characters, female_babies)
 ```
-
+Then we need to create our percent change data frame so we can identify years that are considered a point of interest. We then create the data frame representing names that are considered "media influenced." 
 ```{r}
-# percent change functions
+# percent change and point of interest functions
+babies_pc_df <- create_percent_change_df(babies_df)
 
-# create media influenced names table 
+babies_poi <- create_poi_df(babies_pc)
+
+# create media influenced names table, use default max_range of 5
+media_influenced_df <- create_media_names_df(babies_poi, chars_df)
 ```
-
+Before plotting the results we need to convert the data frames to custom objects. 
 ```{r}
 # convert to custom objects
-
+media_influence_object <- influences(media_influenced_df)
+baby_pc_object <- baby_pc(babies_pc)
+babies_count_object <- baby_count(babies_df)
 ```
 
+Plot the custom objects from above to visualize the result 
 ```{r}
 # plot and visualize the results 
-
-```
-
-## Interesting Findings
-
-```{r}
-# add some interesting take aways from the analysis ?
-
+# Update parameters once I see the plot functions and choose specific names
+plot(media_influence)
+plot(baby_counts)
+plot(baby_pc_object)
 ```
 
