@@ -5,7 +5,7 @@
 \alias{characters}
 \title{Characters In Recent Popular Media}
 \format{
-\subsection{\code{CHARACTERS}}{
+\subsection{\code{characters}}{
 
 A data frame with 22,006 rows and 3 columns:
 \describe{

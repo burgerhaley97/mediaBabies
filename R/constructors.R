@@ -12,7 +12,7 @@
 #' @examples
 #' df <- data.frame(Betty=c(73, 62, 86), Murial=c(93, 63, 27))
 #' rownames(df) <- c(1974:1976)
-#' baby_count(colnames(df)[1], rownames(df)[1], df[[1]])
+#' baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 baby_count <- function(name, start_year, vec) {
   obj <- validate_baby_count(name, start_year, vec)
 
@@ -34,7 +34,7 @@ baby_count <- function(name, start_year, vec) {
 #' @examples
 #' df <- data.frame(Betty=c(73, 62, 86), Murial=c(93, 63, 27))
 #' rownames(df) <- c(1974:1976)
-#' validate_baby_count(colnames(df)[1], rownames(df)[1], df[[1]])
+#' validate_baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 validate_baby_count <- function(name, start_year, vec) {
   if (!is.character(name)) {
     stop("The name must be a string.")
@@ -64,7 +64,7 @@ validate_baby_count <- function(name, start_year, vec) {
 #' @examples
 #' df <- data.frame(Betty=c(-73.5, -62.7, 86.1), Murial=c(93, 63, -27))
 #' rownames(df) <- c(1974:1976)
-#' baby_pc(colnames(df)[1], rownames(df)[1], df[[1]])
+#' baby_pc(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 baby_pc <- function(name, start_year, vec) {
   obj <- validate_baby_pc(name, start_year, vec)
 
@@ -86,7 +86,7 @@ baby_pc <- function(name, start_year, vec) {
 #' @examples
 #' df <- data.frame(Betty=c(-73.5, -62.7, 86.1), Murial=c(93, 63, -27))
 #' rownames(df) <- c(1974:1976)
-#' validate_baby_pc(colnames(df)[1], rownames(df)[1], df[[1]])
+#' validate_baby_pc(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 validate_baby_pc <- function(name, start_year, vec) {
   if (!is.character(name)) {
     stop("The name must be a string.")
@@ -114,7 +114,7 @@ validate_baby_pc <- function(name, start_year, vec) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(name=c("Betty","Murial"), title=c("Jumanji", "Phantom"),
+#' df <- data.frame(name=c("Betty","Betty"), title=c("Jumanji", "Phantom"),
 #'   release_year=c(1996, 1990), poi_year=c(1996, 1991),
 #'   percent_change=c(154.6532, -233.9874))
 #' influences(df)

@@ -5,7 +5,7 @@
 #'   part of a name. For example, the name "John Doe" contains two name
 #'   segments, "John" and "Doe". Pieces of media consist of movies and series.
 #'
-#' @format ## `CHARACTERS`
+#' @format ## `characters`
 #' A data frame with 22,006 rows and 3 columns:
 #' \describe{
 #'   \item{name}{The name segment of the character}
@@ -14,3 +14,31 @@
 #' }
 #' @source <https://developer.imdb.com/non-commercial-datasets/>
 "characters"
+
+#' Female Baby Names
+#'
+#' A subset of data from the Social Security Administration consisting of names
+#'   given to female babies born 1973 - 2023.
+#'
+#' @format ## `female_babies`
+#' A data frame with 50 rows and 61622 columns:
+#' \describe{
+#'   \item{names}{The counts of female babies given a particular name, with each
+#'      row being a year}
+#' }
+#' @source <https://developer.imdb.com/non-commercial-datasets/>
+"female_babies"
+
+#' Male Baby Names
+#'
+#' A subset of data from the Social Security Administration consisting of names
+#'   given to female babies born 1973 - 2023.
+#'
+#' @format ## `male_babies`
+#' A data frame with 50 rows and 61622 columns:
+#' \describe{
+#'   \item{names}{The counts of male babies given a particular name, with each
+#'      row being a year}
+#' }
+#' @source <https://developer.imdb.com/non-commercial-datasets/>
+"male_babies"
