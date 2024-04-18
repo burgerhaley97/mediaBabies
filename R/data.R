@@ -5,7 +5,7 @@
 #'   part of a name. For example, the name "John Doe" contains two name
 #'   segments, "John" and "Doe". Pieces of media consist of movies and series.
 #'
-#' @format ## `CHARACTERS`
+#' @format ## `characters`
 #' A data frame with 22,006 rows and 3 columns:
 #' \describe{
 #'   \item{name}{The name segment of the character}
