@@ -3,25 +3,26 @@
 \docType{data}
 \name{female_babies}
 \alias{female_babies}
-\title{Female Baby Names}
+\title{Female Baby Name Counts}
 \format{
-\subsection{\code{female_babies}}{
+\subsection{\code{FEMALE_BABIES}}{
 
-A data frame with 50 rows and 61622 columns:
+A data frame with 50 rows and 61,622 columns:
 \describe{
-\item{names}{The counts of female babies given a particular name, with each
-row being a year}
+\item{name}{There is an individual column for each unique female baby name}
+\item{year}{The rownames are the years of 1973 to 2022 and contain the
+counts of the baby names for that year}
 }
 }
 }
 \source{
-\url{https://developer.imdb.com/non-commercial-datasets/}
+\url{https://www.ssa.gov/oact/babynames/limits.html}
 }
 \usage{
 female_babies
 }
 \description{
-A subset of data from the Social Security Administration consisting of names
-given to female babies born 1973 - 2023.
+A consolidated dataset from the Social Security Administration website
+consisting of female baby names and counts from 1973 to 2022.
 }
 \keyword{datasets}
