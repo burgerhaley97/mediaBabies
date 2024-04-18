@@ -4,12 +4,14 @@
 \alias{plot.influences}
 \title{Generic Plot Class influences}
 \usage{
-\method{plot}{influences}(x, y, ...)
+\method{plot}{influences}(x, y, sex, ...)
 }
 \arguments{
 \item{x}{An object of class influences.}
 
 \item{y}{An object of class baby_count or baby_pc.}
+
+\item{sex}{Enter whether the name is male or female.}
 
 \item{...}{Traditional plot function arguments.}
 }

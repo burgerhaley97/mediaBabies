@@ -5,6 +5,7 @@
 #'
 #' @param x An object of class influences.
 #' @param y An object of class baby_count or baby_pc.
+#' @param sex Enter whether the name is male or female.
 #' @param ... Traditional plot function arguments.
 #' @import ggplot2
 #' @return A plot of the influences object
@@ -28,13 +29,10 @@
 #' plot(influ_obj, pc_obj)
 #' plot(influ_obj, bc_obj)
 #' @export
-plot.influences <- function(x, y, ...) {
+plot.influences <- function(x, y, sex, ...) {
   # Determining y-axis name
-  if (inherits(y, "baby_count")) {
-    y_name = "Count"
-  } else {
-    y_name = "Percent Change"
-  }
+  y_name <- ifelse(inherits(y, "baby_count"), "Count", "Percent Change")
+  mf_color <- ifelse(tolower(sex) == "male", "lightblue", "pink")
   # identifying needed values
   name <- attr(y, "name")
   year <- attr(y, "start_year")
@@ -48,20 +46,26 @@ plot.influences <- function(x, y, ...) {
                    years = years)
   # plotting objects
   ggplot2::ggplot(data = df, aes(x = years, y = values)) +
-    geom_line() +
+    geom_line(color = mf_color, linewidth = 3) +
     geom_point(data = df[df$years %in% poi_year, ],
-               aes(x = years, y = values, col = "lightblue"), size = 3) +
+               aes(x = years, y = values, color = mf_color), size = 5) +
     geom_vline(xintercept = release_year, linetype = "dotted")+
     geom_text(data = df[df$years %in% release_year, ],
               aes(x = release_year, y = values, label = title),
               vjust = -1, hjust = 0.5) +
+    scale_color_manual(values=c(mf_color)) +
     scale_x_continuous(breaks=seq(year, year + length(y)-1, 1)) +
     theme(
-      plot.title = element_text(size = 20, hjust = 0.5, face = "bold"),
-      plot.subtitle = element_text(size = 14, face = "italic", hjust = 0.5),
+      plot.background = element_rect(fill = "white"),
+      panel.background = element_rect(fill = "white"),
+      panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5),
+      panel.grid.major.y = element_line(color = "lightgrey", linewidth = 0.2),
+      panel.grid.major.x = element_line(color = "lightgrey", linewidth = 0.2),
+      plot.title = element_text(size = 22, hjust = 0.5, face = "bold"),
+      plot.subtitle = element_text(size = 15, face = "italic", hjust = 0.5),
       axis.title.y = element_text(size = 12, vjust = 3),
-      axis.text.x = element_text(size = 10, vjust = -1),
-      axis.text.y = element_text(size = 10),
+      axis.text.x = element_text(size = 10, vjust = -1, color = "black"),
+      axis.text.y = element_text(size = 10, color = "black"),
       axis.ticks = element_blank(),
       legend.position = "none",
       plot.margin = unit(c(1, 1, 1, 1), "cm")
