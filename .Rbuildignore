@@ -3,3 +3,5 @@
 ^LICENSE\.md$
 ^mediaBabies\.Rproj$
 ^\.Rproj\.user$
+^doc$
+^Meta$

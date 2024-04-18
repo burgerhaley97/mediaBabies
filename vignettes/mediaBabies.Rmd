@@ -16,77 +16,79 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
-)
+  )
 ```
 
 ## Installation
 
 You can install the development version of mediaBabies from
-[GitHub](https://github.com/burgerhaley97/mediaBabies.git) with:
+`[GitHub]` at https://github.com/burgerhaley97/mediaBabies.git with:
 
-```{r}
-# You can install the package from GitHub
+```{r, message = FALSE}
+# Install the package from GitHub
 devtools::install_github("burgerhaley97/mediaBabies")
 ```
 
 
 ## Introduction: 
 
-The mediaBabies package allows you to explore the correlation between the year a media title was released and the number of babies that were named the corresponding character's name. This package uses (insert data sources) to get the necessary media and baby names data. You can use the custom functions in this package to filter the raw media data and babies names data, create custom objects, and plot the objects to visualize any trends.
+The mediaBabies package allows you to explore the correlation between the year a media title was released and the number of babies that were named the corresponding character's name. This package uses media information from the IMDB developer data base and social security data for baby names counts from 1973 to 2023. You can use the custom functions in this package to filter the media and babies names data, create custom objects, and plot the objects to visualize any trends for specific names.
 
 * `filter_char_by_baby_names()` Filters the movie character dataframe to only include movie characters that have a name listed in the baby names data frame.
 * `filter_baby_names_by_char()` Filters baby names data frame to only include names
 that have an associated character in the movie titles dataframe.
 * `create_poi_df()` Creates a dataframe consisting of three columns: name, year, and
 percent_change for the baby names data. 
-* `media_influenced_names()` Creates a dataframe with the name, title, release_year, poi_year, and percent_change columns for future analysis.
+* `create_media_names_df()` Creates a dataframe with the name, title, release_year, poi_year, and percent_change columns for future analysis.
+* `infuences()` Creates a custom influence object for plotting.
+* `baby_count()` Creates a custom baby count object for plotting.
   
 
 ## Example Workflow
 
 ```{r setup, message = FALSE}
-# Make sure package is installed first 
 library("mediaBabies")
 ```
 
-We'll start by reading in and filtering the raw data.
+We'll start by reading in and filtering the data included in our package. 
 ```{r}
-# load raw data media data
+# Load raw data media data
 data(characters, package = "mediaBabies")
-head(characters)
 
-# load boy_names and girl_names
+# Load female babies names data
 data(female_babies, package = "mediaBabies")
-head(female_babies) ## use Adaline
 
-# Filter the data frames so only matching names from each are kept
+# Filter the data frames so only matching names from each are kept.
 babies_df <- filter_baby_names_by_char(female_babies, characters)
 chars_df <- filter_char_by_baby_names(characters, female_babies)
+head(chars_df)
 ```
-Then we need to create our percent change data frame so we can identify years that are considered a point of interest. We then create the data frame representing names that are considered "media influenced." 
+Then we need to create our percent change data frame so we can identify years that are considered a point of interest. We then create the data frame representing names that are considered "media influenced." Here we choose to use the name Trinity.
 ```{r}
 # percent change and point of interest functions
 babies_pc_df <- create_percent_change_df(babies_df)
-babies_poi <- create_poi_df(babies_pc)
+babies_poi <- create_poi_df(babies_pc_df)
+head(babies_poi)
 
-# create media influenced names table, use default max_range of 5 (specific name for data frame)
+# create media influenced names table, use default max_range of 5  
 media_influenced_df <- create_media_names_df(babies_poi, chars_df)
-name_influenced <- media_influenced_df[media_influenced_df$name == "Adaline"]
-```
-Before plotting the results we need to convert the data frames to custom objects. 
-```{r}
-# convert to custom objects
-baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
-
-media_influence_object <- influences(name_influenced_df)
-babies_Adaline <- baby_df[["Adaline"]]
-baby_count_obj <- baby_count("Adaline", as.numeric(1973), babies_name_df)
+Trinity_influenced <- media_influenced_df[media_influenced_df$name == "Trinity", ]
+head(Trinity_influenced)
 ```
 
-Plot the custom objects from above to visualize the result 
+Before plotting the results we need to convert the dataframes to custom objects. 
 ```{r}
+# convert to custom influence object 
+media_influence_object <- influences(Trinity_influenced)
+
+# convert to custom baby_count object
+babies_Trinity <- babies_df[["Trinity"]]
+baby_count_obj <- baby_count("Trinity", as.numeric(1973), babies_Trinity)
+```
+
+Plot the custom objects from above to visualize the influence of media events on the name Trinity.
+```{r,fig.dim = c(8,6)}
 # plot and visualize the results 
-plot(media_influence, baby_count_obj)
-
+plot(media_influence_object, baby_count_obj, sex = "female")
 ```
 

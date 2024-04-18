@@ -15,3 +15,5 @@
 # Data raw files
 data-raw/
 inst/doc
+/doc/
+/Meta/
