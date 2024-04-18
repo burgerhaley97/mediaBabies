@@ -22,39 +22,44 @@
 #' bc_obj <- baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 #' # creating influences object
 #' df <- data.frame(name=c("Leia", "Leia"), title=c("Star Wars", "Star Wars"),
-#' release_year=c(1977, 1978), poi_year=c(1977, 1978),
+#' release_year=c(1977, 1977), poi_year=c(1977, 1978),
 #' percent_change=c(366.7, 59.2))
 #' influ_obj <- influences(df)
 #' # plotting objects
-#' plot(influ_obj, pc_obj)
-#' plot(influ_obj, bc_obj)
+#' plot(influ_obj, pc_obj, "female")
+#' plot(influ_obj, bc_obj, "female")
 #' @export
 plot.influences <- function(x, y, sex, ...) {
+
   # Determining y-axis name
-  y_name <- ifelse(inherits(y, "baby_count"), "Count", "Percent Change")
+  y_name <- ifelse(inherits(y, "baby_count"),
+                   "Name Count", "Name Percent Change")
   mf_color <- ifelse(tolower(sex) == "male", "lightblue", "pink")
+
   # identifying needed values
   name <- attr(y, "name")
   year <- attr(y, "start_year")
   poi_year <- x[["poi_year"]]
   release_year <- x[["release_year"]]
   title <- x[["title"]]
+
   # creating data frame
-  values <- y[1:length(y)]
-  years <- seq(year, year + length(y)-1, 1)
+  values <- y[seq_along(y)]
+  years <- seq(year, year + length(y) - 1, 1)
   df <- data.frame(values = values,
                    years = years)
+
   # plotting objects
   ggplot2::ggplot(data = df, aes(x = years, y = values)) +
     geom_line(color = mf_color, linewidth = 3) +
     geom_point(data = df[df$years %in% poi_year, ],
                aes(x = years, y = values, color = mf_color), size = 5) +
-    geom_vline(xintercept = release_year, linetype = "dotted")+
+    geom_vline(xintercept = release_year, linetype = "dotted") +
     geom_text(data = df[df$years %in% release_year, ],
-              aes(x = release_year, y = values, label = title),
+              aes(x = unique(release_year), y = values,
+                  label = unique(title)),
               vjust = -1, hjust = 0.5) +
-    scale_color_manual(values=c(mf_color)) +
-    scale_x_continuous(breaks=seq(year, year + length(y)-1, 1)) +
+    scale_color_manual(values = c(mf_color)) +
     theme(
       plot.background = element_rect(fill = "white"),
       panel.background = element_rect(fill = "white"),

@@ -35,10 +35,10 @@ rownames(df) <- c(1974:1980)
 bc_obj <- baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 # creating influences object
 df <- data.frame(name=c("Leia", "Leia"), title=c("Star Wars", "Star Wars"),
-release_year=c(1977, 1978), poi_year=c(1977, 1978),
+release_year=c(1977, 1977), poi_year=c(1977, 1978),
 percent_change=c(366.7, 59.2))
 influ_obj <- influences(df)
 # plotting objects
-plot(influ_obj, pc_obj)
-plot(influ_obj, bc_obj)
+plot(influ_obj, pc_obj, "female")
+plot(influ_obj, bc_obj, "female")
 }
