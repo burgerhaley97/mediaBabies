@@ -10,6 +10,12 @@
 calculate_percent_change <- function(counts) {
   pc <- c(0, diff(counts) / pmin(counts[seq_along(counts) - 1],
                                  counts[-1]) * 100)
+
+  # Replace all NaN with 0
+  pc[is.nan(pc)] <- 0
+
+  # Replace all +- INF with +- 10000
+  pc[is.infinite(pc)] <- ifelse(sign(pc[is.infinite(pc)]) == 1, 10000, -10000)
   return(pc)
 }
 
@@ -26,14 +32,8 @@ calculate_percent_change <- function(counts) {
 #'   columns contain a percent change from the last year.
 #' @export
 create_percent_change_df <- function(count_df) {
-  # TODO: Should we have the count df have years as rows and names as cols?
-  # Transpose count_df so years are rows and names are columns
-  tcount_df <- as.data.frame(t(count_df[, -1]))
-  colnames(tcount_df) <- count_df$name
-
-  # Calculate percent changes
-  pc_df <- as.data.frame(apply(tcount_df, 2, calculate_percent_change))
-  rownames(pc_df) <- rownames(tcount_df)
+  pc_df <- as.data.frame(apply(count_df, 2, calculate_percent_change))
+  rownames(pc_df) <- rownames(count_df)
   return(pc_df)
 }
 
@@ -58,7 +58,6 @@ create_poi_df <- function(pc_df, pc_cutoff = 100.0) {
   for (name in colnames(pc_df)) {
     prev_year_above_cutoff <- FALSE
     for (year in 1:(nrow(pc_df) - 1)) {
-
       # If the percent change is above the cutoff
       if (abs(pc_df[year, name]) > pc_cutoff) {
 

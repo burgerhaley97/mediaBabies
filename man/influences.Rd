@@ -17,7 +17,7 @@ The influences object
 influences S3 class
 }
 \examples{
-df <- data.frame(name=c("Betty","Murial"), title=c("Jumanji", "Phantom"),
+df <- data.frame(name=c("Betty","Betty"), title=c("Jumanji", "Phantom"),
   release_year=c(1996, 1990), poi_year=c(1996, 1991),
   percent_change=c(154.6532, -233.9874))
 influences(df)

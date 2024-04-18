@@ -22,5 +22,5 @@ Validator for baby_pc constructor
 \examples{
 df <- data.frame(Betty=c(-73.5, -62.7, 86.1), Murial=c(93, 63, -27))
 rownames(df) <- c(1974:1976)
-validate_baby_pc(colnames(df)[1], rownames(df)[1], df[[1]])
+validate_baby_pc(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
 }

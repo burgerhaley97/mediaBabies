@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Haley", "Burger", , "first.last@example.com", role = c("aut", "cre")),
     person("Brielle", "Cirlig", , "a02322411@usu.edu", role = c("aut")),
-    person("Hannah", "Davis", , "first.last@example.com", role = c("aut"))
+    person("Hannah", "Davies", , "a02168867@usu.edu", role = c("aut"))
     )
 Description: This packages analyses the effect of popular movies and TV shows
   on baby-naming trends over the last 50 years.
@@ -20,6 +20,8 @@ Suggests:
     testthat (>= 3.0.0)
 Depends: 
     R (>= 2.10)
+Imports:
+    ggplot2
 LazyData: true
 Config/testthat/edition: 3
 VignetteBuilder: knitr

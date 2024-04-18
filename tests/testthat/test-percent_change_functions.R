@@ -15,13 +15,12 @@ test_that("calculate_percent_change calculates correctly", {
 
 test_that("create_percent_change_df creates df correctly", {
   # Arrange
-  test_count_df <- data.frame(name = c("Betty", "Murial", "Theola"),
-                              c(33, 93, 69),
-                              c(71, 42, 88),
-                              c(83, 15, 56))
-  colnames(test_count_df) <- c("name", 2020, 2021, 2022)
+  test_count_df <- data.frame(Betty = c(33, 71, 83),
+                           Murial = c(92, 43, 15),
+                           Theola = c(69, 88, 56))
+  rownames(test_count_df) <- c(2020, 2021, 2022)
   expected_pc_df <- data.frame(Betty = c(0, 115.1515, 16.9014),
-                               Murial = c(0, -121.4286, -180),
+                               Murial = c(0, -113.9535, -186.6667),
                                Theola = c(0, 27.5362, -57.1429))
   rownames(expected_pc_df) <- c(2020, 2021, 2022)
 

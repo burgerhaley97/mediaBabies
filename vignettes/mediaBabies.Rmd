@@ -57,7 +57,7 @@ head(characters)
 
 # load boy_names and girl_names
 data(female_babies, package = "mediaBabies")
-head(female_babies)
+head(female_babies) ## use Adaline
 
 # Filter the data frames so only matching names from each are kept
 babies_df <- filter_baby_names_by_char(female_babies, characters)
@@ -71,22 +71,22 @@ babies_poi <- create_poi_df(babies_pc)
 
 # create media influenced names table, use default max_range of 5 (specific name for data frame)
 media_influenced_df <- create_media_names_df(babies_poi, chars_df)
-name_influenced <- media_influenced_df[media_influenced_df$name == "Angela"]
+name_influenced <- media_influenced_df[media_influenced_df$name == "Adaline"]
 ```
 Before plotting the results we need to convert the data frames to custom objects. 
 ```{r}
 # convert to custom objects
+baby_count(colnames(df)[1], as.numeric(rownames(df)[1]), df[[1]])
+
 media_influence_object <- influences(name_influenced_df)
-babies_Angela <- baby_df[["Angela"]]
-baby_count_object <- baby_count("Angela", 1973, babies_name_df)
+babies_Adaline <- baby_df[["Adaline"]]
+baby_count_obj <- baby_count("Adaline", as.numeric(1973), babies_name_df)
 ```
 
 Plot the custom objects from above to visualize the result 
 ```{r}
 # plot and visualize the results 
-# Update parameters once I see the plot functions and choose specific names
-plot(media_influence)
-plot(baby_counts)
-plot(baby_pc_object)
+plot(media_influence, baby_count_obj)
+
 ```
 

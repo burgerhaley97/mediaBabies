@@ -4,24 +4,23 @@ library(tidyverse)
 library(data.table)
 
 # pulling in text files from data-raw folder
-listfile <- list.files("data-raw/babyNames", 
-                       pattern = "txt", full.names = T, recursive = TRUE)
-# head(listfile)
+listfile <- list.files("data-raw/babyNames",
+                       pattern = "txt", full.names = TRUE, recursive = TRUE)
 
 # Unique Baby Names
 # creates df of unique names for each gender
 unique_names <- function(listfile) {
   m_name <- c()
   f_name <- c()
-  for (i in 1:length(listfile)){
+  for (i in seq_along(listfile)){
     # adding in name and gender info
-    dat <- read.table(listfile[i],header = FALSE, sep = ",")
+    dat <- read.table(listfile[i], header = FALSE, sep = ",")
     # identify genders
-    m_rows <- (dat[,2] == "M")
-    f_rows <- (dat[,2] == "F")
+    m_rows <- (dat[, 2] == "M")
+    f_rows <- (dat[, 2] == "F")
     # add names to list
-    m_name <- c(m_name, dat[m_rows,1])
-    f_name <- c(f_name, dat[f_rows,1])
+    m_name <- c(m_name, dat[m_rows, 1])
+    f_name <- c(f_name, dat[f_rows, 1])
   }
   # remove duplicate names
   m_name <- unique(m_name)
@@ -41,20 +40,20 @@ name_counts <- function(listfile, names_list) {
   m_name <- names_list[[1]]
   f_name <- names_list[[2]]
   # for each txt file...
-  for (i in 1:length(listfile)){
+  for (i in seq_along(listfile)){
     # empty vectors to store name counts
     male_info <- c()
     fem_info <- c()
     # extract year from file name
     year <- substring(listfile[i], 23, 26)
     # extract data from file
-    dat <- read.table(listfile[i],header = FALSE, sep = ",")
+    dat <- read.table(listfile[i], header = FALSE, sep = ",")
     # identify male and female data rows
-    male_rows <- (dat[,2] == "M")
-    fem_rows <- (dat[,2] == "F")
+    male_rows <- (dat[, 2] == "M")
+    fem_rows <- (dat[, 2] == "F")
     # add name and count info to vectors
-    male_info <- c(male_info, dat[male_rows,c(1,3)])
-    fem_info <- c(fem_info, dat[fem_rows,c(1,3)])
+    male_info <- c(male_info, dat[male_rows, c(1, 3)])
+    fem_info <- c(fem_info, dat[fem_rows, c(1, 3)])
     # convert to a dataframe
     male_info <- as.data.frame(male_info)
     fem_info <- as.data.frame(fem_info)
@@ -77,13 +76,13 @@ transposed_df <- function(name_counts) {
   m_counts <- name_counts[[1]]
   f_counts <- name_counts[[2]]
   # transposing all but name column
-  m_counts_t <- transpose(m_counts[,-1])
-  f_counts_t <- transpose(f_counts[,-1])
+  m_counts_t <- transpose(m_counts[, -1])
+  f_counts_t <- transpose(f_counts[, -1])
   # assigning the years to be the row names and names to be column names
-  rownames(m_counts_t) <- colnames(m_counts[,-1])
-  colnames(m_counts_t) <- m_counts[,1]
-  rownames(f_counts_t) <- colnames(f_counts[,-1])
-  colnames(f_counts_t) <- f_counts[,1]
+  rownames(m_counts_t) <- colnames(m_counts[, -1])
+  colnames(m_counts_t) <- m_counts[, 1]
+  rownames(f_counts_t) <- colnames(f_counts[, -1])
+  colnames(f_counts_t) <- f_counts[, 1]
   return(list(m_counts_t, f_counts_t))
 }
 
