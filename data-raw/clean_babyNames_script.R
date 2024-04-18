@@ -61,8 +61,8 @@ name_counts <- function(listfile, names_list) {
     names(male_info) <- c("baby_name", year)
     names(fem_info) <- c("baby_name", year)
     # join name count data to the unique baby names lists
-    m_name <- left_join(m_name, male_info, by = "baby_name")
-    f_name <- left_join(f_name, fem_info, by = "baby_name")
+    m_name <- deplyr::left_join(m_name, male_info, by = "baby_name")
+    f_name <- deplyr::left_join(f_name, fem_info, by = "baby_name")
   }
   # replace all nas in year column with 0s
   m_name[is.na(m_name)] <- 0
