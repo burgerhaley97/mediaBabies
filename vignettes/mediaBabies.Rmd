@@ -1,6 +1,6 @@
 ---
 title: "mediaBabies"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 descrition: |
   The mediaBabies package allows you to explore the correlation between the   
   year a media title was released and the number of babies that were named    
@@ -16,7 +16,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
-  )
+)
 ```
 
 ## Installation
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 You can install the development version of mediaBabies from
 `[GitHub]` at https://github.com/burgerhaley97/mediaBabies.git with:
 
-```{r, message = FALSE}
+```{r, message = FALSE, eval = FALSE}
 # Install the package from GitHub
 devtools::install_github("burgerhaley97/mediaBabies")
 ```
@@ -32,25 +32,38 @@ devtools::install_github("burgerhaley97/mediaBabies")
 
 ## Introduction: 
 
-The mediaBabies package allows you to explore the correlation between the year a media title was released and the number of babies that were named the corresponding character's name. This package uses media information from the IMDB developer data base and social security data for baby names counts from 1973 to 2023. You can use the custom functions in this package to filter the media and babies names data, create custom objects, and plot the objects to visualize any trends for specific names.
+The mediaBabies package is a fun demonstration of using an R Package to house data cleaning, modeling, and analysis functions that can be used to create reproducible research. 
+This package allows you to explore the correlation between baby names and character names in popular media releases. This package uses media information from the IMDB developer database and baby names from the United States Social Security dataset from 1973 to 2023. 
 
-* `filter_char_by_baby_names()` Filters the movie character dataframe to only include movie characters that have a name listed in the baby names data frame.
-* `filter_baby_names_by_char()` Filters baby names data frame to only include names
-that have an associated character in the movie titles dataframe.
-* `create_poi_df()` Creates a dataframe consisting of three columns: name, year, and
-percent_change for the baby names data. 
-* `create_media_names_df()` Creates a dataframe with the name, title, release_year, poi_year, and percent_change columns for future analysis.
-* `infuences()` Creates a custom influence object for plotting.
-* `baby_count()` Creates a custom baby count object for plotting.
+The IMDB database is very large (>6.5 GB) and so was filtered before inclusion in this package. The dataset was filtered as follows:
+* Release year was filtered to all titles released on or after 1973
+* Titles were filtered to only non-adult titles
+* Types were filtered to only movies and TV series
+* TV episodes were associated with the series title rather than the episode title
+* Ratings were filtered by better than 7.0 out of 10
+* Popularity was filtered by requiring the number of ratings votes to be over 100,000 votes.
+We compiled the filtered data into the characters dataset, which includes information about the media title, associated character names, and release year. 
+
+The name counts datasets represent how many people of a given name applied for social security cards in a year. We chose not to normalize the data by population, as population shifts cause gradual changes in name counts and our analysis looks for sudden changes in name counts. We compiled this data into female_babies and male_babies datasets, which include name counts by year for all babies given the named gender at birth. 
+
+This package also includes custom functions to filter the media and babies names data, create custom objects, and plot the objects to visualize any trends for specific names, as follows:
+
+* `filter_char_by_baby_names()` Filters the movie character dataframe to only include movie characters that have a name listed in the provided baby name dataframe.
+* `filter_baby_names_by_char()` Filters baby name dataframe to only include names
+that are included in the provided movie characters dataframe.
+* `filter_baby_names_by_name()` Filters a baby name dataframe by another baby name dataframe, eliminating any names in the first dataframe that are more common in the second dataframe.
+* `create_poi_df()` Takes a baby names dataframe and analyzes each name for significant points of interest, defined by percent change values (positive or negative) that are higher than a provided cutoff. It outputs these significant points of interest in a dataframe consisting of three columns: name, year, and percent_change. 
+* `create_media_names_df()` Takes a point of interest dataframe and a media characters dataframe. For each name, finds correlations between a media release and a point of interest, within a provided number of years after the media release. Outputs these correlations in a dataframe with the (baby) name, (media) title, release_year, poi_year, and percent_change columns for future analysis.
+* `infuences()` Creates a custom influence object of a single name for plotting.
+* `baby_count()` Creates a custom baby count object of a single name for plotting.
   
-
 ## Example Workflow
 
 ```{r setup, message = FALSE}
 library("mediaBabies")
 ```
 
-We'll start by reading in and filtering the data included in our package. 
+We'll start by reading in the data and creating dataframes for the names and characters that are in both the baby names dataset and the characters dataset. 
 ```{r}
 # Load raw data media data
 data(characters, package = "mediaBabies")
@@ -63,32 +76,67 @@ babies_df <- filter_baby_names_by_char(female_babies, characters)
 chars_df <- filter_char_by_baby_names(characters, female_babies)
 head(chars_df)
 ```
-Then we need to create our percent change data frame so we can identify years that are considered a point of interest. We then create the data frame representing names that are considered "media influenced." Here we choose to use the name Trinity.
+Next, we create a percent change dataframe so we can identify years that have a sudden spike or fall in popularity. We then use this percent change dataframe to create a point-of-interest dataframe containing names that have a point of interest, which we have defined as any name that has a year-over-year percent change of over 100% or under -100%. 
 ```{r}
 # percent change and point of interest functions
 babies_pc_df <- create_percent_change_df(babies_df)
 babies_poi <- create_poi_df(babies_pc_df)
 head(babies_poi)
+```
 
-# create media influenced names table, use default max_range of 5  
+We then use this point-of-interest dataframe and the characters dataframe (which also contains titles and release dates) to create a “media influenced” dataframe containing names that are considered media influenced. We considered any name that had a point of interest within a given time (default 5 years) after a media release containing a character with that same name to be media-influenced. 
+```{r}
+# create media influenced names table, use default max_range of 5
 media_influenced_df <- create_media_names_df(babies_poi, chars_df)
-Trinity_influenced <- media_influenced_df[media_influenced_df$name == "Trinity", ]
-head(Trinity_influenced)
+```
+
+Individual names from the media-influenced dataframe can be made into custom objects and then plotted with their respective counts by year. This information can then be plotted with a custom object created from the yearly counts of a particular name.
+
+```{r}
+# Pull all media influences for a particular name from the media influences
+# dataframe and convert to custom influence object.
+trinity_influenced <- media_influenced_df[media_influenced_df$name ==
+                                            "Trinity", ]
+media_influence_object <- influences(trinity_influenced)
+
+# convert to custom baby_count object
+babies_trinity <- babies_df[["Trinity"]]
+baby_count_trinity <- baby_count("Trinity", as.numeric(1973), babies_trinity)
+```
+
+The custom objects from below can be plotted to visualize the influence of media events on a particular name. The plot shows the influence of key media events on the popularity of the chosen names over time. The y-axis contains the “Name Count” values, which represent the number of times a US social security number application was filled out for a given name in a given year. The x-axis contains the year. A vertical dotted line shows the release date of a piece of media that appears to influence the given name. A larger dot on the name line shows the year that the given name shows this influence.
+
+```{r,fig.dim = c(8,6)}
+# plot and visualize the results
+plot(media_influence_object, baby_count_trinity, sex = "female")
+```
+
+The first plot is a plot for the name “Trinity”. In this plot, we see a huge increase in the popularity of the name “Trinity” in the years following the release of the first Matrix movie, with a second smaller jump for the sequels (which were not highly-rated enough to be included in the list of movies that could be displayed as an influence). After “Trinity” peaked, the name gradually became less and less popular each year, but maintained a popularity higher than before The Matrix first came out.
+
+
+Now repeat the same workflow for the name Elsa.
+```{r}
+elsa_influenced <- media_influenced_df[media_influenced_df$name == "Elsa", ]
+head(elsa_influenced)
 ```
 
 Before plotting the results we need to convert the dataframes to custom objects. 
 ```{r}
-# convert to custom influence object 
-media_influence_object <- influences(Trinity_influenced)
+# convert to custom influence object
+media_influence_object <- influences(elsa_influenced)
 
 # convert to custom baby_count object
-babies_Trinity <- babies_df[["Trinity"]]
-baby_count_obj <- baby_count("Trinity", as.numeric(1973), babies_Trinity)
+babies_elsa <- babies_df[["Elsa"]]
+baby_count_elsa <- baby_count("Elsa", as.numeric(1973), babies_elsa)
 ```
 
-Plot the custom objects from above to visualize the influence of media events on the name Trinity.
+Plot the custom objects from above to visualize the influence of media events on the name Elsa.
 ```{r,fig.dim = c(8,6)}
-# plot and visualize the results 
-plot(media_influence_object, baby_count_obj, sex = "female")
+# plot and visualize the results
+plot(media_influence_object, baby_count_elsa, sex = "female")
 ```
 
+The second plot is a plot for the name “Elsa”. Similarly to “Trinity”, this plot had a huge increase in popularity immediately following the release of the movie Frozen. However, this increase of popularity was a sudden spike rather than a lasting increase and sharply fell in popularity the very next year.  Before “Frozen” came out “Elsa” was displaying a gradual positive trend, but after the sudden spike and fall of popularity after “Frozen” came out, the name decreased in popularity to well below its pre-Frozen levels and is continuing its downward trend. We suspect that the name “Elsa” is a victim of its own popularity–everyone liked it when it first came out, but when people realized that it was popular to the point of oversaturation, it no longer became a desirable name for one’s baby.
+
+## Conclusion
+This package is an exploration of the influence that popular media has on the names that people choose for their babies. You can use this package to explore the popularity of your own name or a name of interest over time and see if the name count was associated with any popular media releases. By exploring different names, we have seen that if a name appears to be influenced by the release of a popular piece of media, that influence is nearly always positive. Inclusion in a piece of popular media rarely if ever has a negative effect on the popularity of a name, even if that name was included as the name of a villain character.
