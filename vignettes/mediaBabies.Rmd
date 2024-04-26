@@ -1,6 +1,6 @@
 ---
 title: "mediaBabies"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_vignette
 descrition: |
   The mediaBabies package allows you to explore the correlation between the   
   year a media title was released and the number of babies that were named    
@@ -36,12 +36,14 @@ The mediaBabies package is a fun demonstration of using an R Package to house da
 This package allows you to explore the correlation between baby names and character names in popular media releases. This package uses media information from the IMDB developer database and baby names from the United States Social Security dataset from 1973 to 2023. 
 
 The IMDB database is very large (>6.5 GB) and so was filtered before inclusion in this package. The dataset was filtered as follows:
+
 * Release year was filtered to all titles released on or after 1973
 * Titles were filtered to only non-adult titles
 * Types were filtered to only movies and TV series
 * TV episodes were associated with the series title rather than the episode title
 * Ratings were filtered by better than 7.0 out of 10
 * Popularity was filtered by requiring the number of ratings votes to be over 100,000 votes.
+
 We compiled the filtered data into the characters dataset, which includes information about the media title, associated character names, and release year. 
 
 The name counts datasets represent how many people of a given name applied for social security cards in a year. We chose not to normalize the data by population, as population shifts cause gradual changes in name counts and our analysis looks for sudden changes in name counts. We compiled this data into female_babies and male_babies datasets, which include name counts by year for all babies given the named gender at birth. 
@@ -88,6 +90,7 @@ We then use this point-of-interest dataframe and the characters dataframe (which
 ```{r}
 # create media influenced names table, use default max_range of 5
 media_influenced_df <- create_media_names_df(babies_poi, chars_df)
+head(media_influenced_df)
 ```
 
 Individual names from the media-influenced dataframe can be made into custom objects and then plotted with their respective counts by year. This information can then be plotted with a custom object created from the yearly counts of a particular name.
@@ -114,14 +117,11 @@ plot(media_influence_object, baby_count_trinity, sex = "female")
 The first plot is a plot for the name “Trinity”. In this plot, we see a huge increase in the popularity of the name “Trinity” in the years following the release of the first Matrix movie, with a second smaller jump for the sequels (which were not highly-rated enough to be included in the list of movies that could be displayed as an influence). After “Trinity” peaked, the name gradually became less and less popular each year, but maintained a popularity higher than before The Matrix first came out.
 
 
+
 Now repeat the same workflow for the name Elsa.
 ```{r}
+# Pull the name Elsa
 elsa_influenced <- media_influenced_df[media_influenced_df$name == "Elsa", ]
-head(elsa_influenced)
-```
-
-Before plotting the results we need to convert the dataframes to custom objects. 
-```{r}
 # convert to custom influence object
 media_influence_object <- influences(elsa_influenced)
 
@@ -130,13 +130,12 @@ babies_elsa <- babies_df[["Elsa"]]
 baby_count_elsa <- baby_count("Elsa", as.numeric(1973), babies_elsa)
 ```
 
-Plot the custom objects from above to visualize the influence of media events on the name Elsa.
 ```{r,fig.dim = c(8,6)}
 # plot and visualize the results
 plot(media_influence_object, baby_count_elsa, sex = "female")
 ```
 
-The second plot is a plot for the name “Elsa”. Similarly to “Trinity”, this plot had a huge increase in popularity immediately following the release of the movie Frozen. However, this increase of popularity was a sudden spike rather than a lasting increase and sharply fell in popularity the very next year.  Before “Frozen” came out “Elsa” was displaying a gradual positive trend, but after the sudden spike and fall of popularity after “Frozen” came out, the name decreased in popularity to well below its pre-Frozen levels and is continuing its downward trend. We suspect that the name “Elsa” is a victim of its own popularity–everyone liked it when it first came out, but when people realized that it was popular to the point of oversaturation, it no longer became a desirable name for one’s baby.
+The second plot is a plot for the name “Elsa”. Similarly to “Trinity”, this plot had a huge increase in popularity immediately following the release of the movie Frozen. However, this increase of popularity was a sudden spike rather than a lasting increase and sharply fell in popularity the very next year.  Before “Frozen” came out “Elsa” was displaying a gradual positive trend, but after the sudden spike and fall of popularity after “Frozen” came out, the name decreased in popularity to well below its pre-Frozen levels and is continuing its downward trend. We suspect that the name “Elsa” is a victim of its own popularity–everyone liked it when it first came out, but when people realized that it was popular to the point of over saturation, it no longer became a desirable name for one’s baby.
 
 ## Conclusion
 This package is an exploration of the influence that popular media has on the names that people choose for their babies. You can use this package to explore the popularity of your own name or a name of interest over time and see if the name count was associated with any popular media releases. By exploring different names, we have seen that if a name appears to be influenced by the release of a popular piece of media, that influence is nearly always positive. Inclusion in a piece of popular media rarely if ever has a negative effect on the popularity of a name, even if that name was included as the name of a villain character.
